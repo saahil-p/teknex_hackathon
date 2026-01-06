@@ -19,6 +19,9 @@ import styles, { headerTheme } from "./styles";
 import SignupScreen from "./screens/SignupScreen";
 import { LinearGradient } from "expo-linear-gradient";
 import { Animated } from "react-native";
+import ChatbotWidget from "./components/ChatbotWidget";
+
+
 
 // FIREBASE
 import {
@@ -462,7 +465,10 @@ function HomeScreen({ navigation }) {
         >
           <Text style={styles.bottomServiceText}>⚙ Contact Service</Text>
         </TouchableOpacity>
+
       </View>
+      
+      <ChatbotWidget />
     </View>
   );
 }
