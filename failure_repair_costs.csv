@@ -1,0 +1,16 @@
+failure_category,repair_hours,repair_cost_usd
+CCA less than limit,1,200
+Low on Charge,0.5,75
+ABS sensor failure,1.5,250
+Brakes worn out,3,500
+Catalytic Converter Failure,3,1500
+Coolant Leak,2,400
+Engine Oil Replacement,0.5,75
+Fuel Injector Failure,2,600
+Fuel Pump Failure,3,800
+Ignition Coil Failure,1,200
+Mass Airflow Sensor Failure,1,300
+Oxygen Sensor Failure,1,250
+Spark Plug Failure,1.5,250
+Timing Chain Failure,10,2000
+Transmission Failure,20,4000
