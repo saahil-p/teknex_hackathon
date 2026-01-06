@@ -1,0 +1,16 @@
+carHealthApp/node_modules/
+**/node_modules/
+
+
+# Backend
+backend/node_modules/
+backend/.env
+backend/env/
+
+# Common
+.DS_Store
+*.log
+.env
+.env.*
+
+.vscode/

@@ -1,0 +1,257 @@
+/* PAGE */
+.order-page {
+  padding: 40px;
+  color: white;
+  background: #0b0c10;
+  min-height: 100vh;
+}
+
+.title {
+  text-align: center;
+  font-size: 38px;
+  font-weight: 700;
+  margin-bottom: 40px;
+}
+
+/* ⭐ BOOKING DETAILS GRID (Matching OBD style) ⭐ */
+.booking-grid {
+  width: 80%;
+  margin: 0 auto 40px auto;
+  background: #101218;
+  padding: 30px;
+  border-radius: 12px;
+  border: 1px solid #23252E;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+}
+
+.booking-item {
+  background: #16181F;
+  padding: 15px 20px;
+  border-radius: 10px;
+  border: 1px solid #23252E;
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+}
+
+.key {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.value {
+  color: #A9ABB3;
+}
+
+
+/* ===========================
+   OBD DATA SECTION (UPDATED)
+   =========================== */
+
+.obd-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+}
+
+.obd-title {
+  color: #E63946;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+}
+
+/* Main box behind all OBD items */
+.obd-card {
+  background: #16181F;
+  padding: 25px 30px;
+  border-radius: 14px;
+  border: 1px solid #23252E;
+  margin-bottom: 35px;
+
+  box-shadow: 0px 0px 20px rgba(230, 57, 70, 0.1);
+}
+
+/* SYSTEM NAME (ENGINE, etc.) */
+.obd-card h3 {
+  text-align: left;
+  color: #ffffff;
+  font-size: 22px;
+  margin-bottom: 18px;
+  border-left: 4px solid #E63946;
+  padding-left: 10px;
+  text-transform: uppercase;
+}
+
+/* Grid for two-column layout */
+.obd-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* EXACT 2 COLUMNS LIKE YOU WANT */
+  gap: 12px 25px;
+}
+
+/* Each row item */
+.obd-item {
+  background: #1C1E26;
+  padding: 12px 18px;
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border: 1px solid #23252E;
+
+  font-size: 15px;
+}
+
+/* Key styling */
+.obd-key {
+  color: #E63946;
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+/* Value styling */
+.obd-value {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* Responsive fix for mobile screens */
+@media (max-width: 700px) {
+  .obd-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.ai-section {
+  margin-top: 30px;
+}
+
+.ai-title {
+  margin-bottom: 10px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.ai-box {
+  background: #f7f9fc;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 14px;
+  white-space: pre-wrap;
+  border: 1px solid #e5e5e5;
+}
+
+.ai-empty {
+  font-size: 14px;
+  color: #888;
+}
+.summary-card {
+  background: #111318;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 40px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-title {
+  font-size: 24px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  text-align: left;
+  color: white;
+}
+
+.summary-box {
+  background: #121212;
+  padding: 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow: visible;
+  color: #ddd;
+  border: 1px solid #333;
+}
+
+
+.ai-btn {
+  background: linear-gradient(180deg, #3bd6ff, #0077ff);
+  color: white;
+  padding: 14px 32px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0px 4px 12px rgba(0, 119, 255, 0.4);
+  width: fit-content;
+  margin-top: 12px;
+  display: inline-block;
+}
+
+.ai-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 18px rgba(0, 170, 255, 0.5);
+  background: linear-gradient(180deg, #52e3ff, #0088ff);
+}
+
+.ai-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+
+.back-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.back-btn {
+  padding: 12px 28px;
+  font-size: 18px;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s ease-in-out;
+}
+
+.back-btn:hover {
+  background-color: #e5e5e5;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+}
+.back-btn2 {
+  background: linear-gradient(180deg, #3bd6ff, #0077ff);
+  color: white;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0px 4px 12px rgba(0, 119, 255, 0.4);
+  display: inline-block;
+}
+
+.back-btn2:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 6px 18px rgba(0, 170, 255, 0.5);
+  background: linear-gradient(180deg, #52e3ff, #0088ff);
+}
+

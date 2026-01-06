@@ -1,0 +1,117 @@
+/* 🌟 Make Orders page layout identical to Dashboard */
+.orders-page {
+  padding: 20px;          /* same spacing as dashboard-content */
+  padding-top: 0;         /* 🔥 removes top empty gap */
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* 🔹 Header alignment fix */
+.service-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* 🔹 Tabs */
+.booking-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 18px;
+  border-radius: 6px;
+  background: #eee;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.booking-tabs .tab.active {
+  background: #2563eb;
+  color: white;
+}
+
+
+/* 🔹 Table Styling */
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.orders-table th {
+  background: #f3f4f6;
+  font-weight: 600;
+}
+
+/* 🔹 Status Styling */
+.status.pending {
+  color: orange;
+  font-weight: bold;
+}
+
+.status.accepted {
+  color: green;
+  font-weight: bold;
+}
+
+.status.rejected {
+  color: red;
+  font-weight: bold;
+}
+
+/* 🔹 Action Buttons */
+.btn-view {
+  background-color: #1e90ff;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease-in-out;
+  margin-right: 8px;
+}
+
+.btn-view:hover {
+  background-color: #0a78e3;
+}
+
+.btn-accept {
+  background: #19a509;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.btn-reject {
+  background: #d30000;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-accept:hover {
+  background: #138106;
+}
+
+.btn-reject:hover {
+  background: #a70000;
+}

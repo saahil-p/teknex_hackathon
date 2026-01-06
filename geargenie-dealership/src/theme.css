@@ -1,0 +1,26 @@
+:root {
+  --bg-main: #0a0f1c;
+  --bg-card: #111827;
+  --bg-card-glass: rgba(17, 24, 39, 0.65);
+  --primary: #00e0ff;
+  --primary-glow: #00e0ff88;
+  --accent-green: #7CFF6B;
+  --text-light: #e8f1ff;
+  --text-muted: #94a3b8;
+  --border-glow: 0 0 10px var(--primary-glow);
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-light);
+  font-family: 'Inter', sans-serif;
+}
+
+.card {
+  background: var(--bg-card-glass);
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid var(--primary);
+  box-shadow: var(--border-glow);
+  backdrop-filter: blur(12px);
+}

@@ -1,0 +1,153 @@
+/* Full page background */
+.welcome-container {
+  width: 100%;
+  height: 100vh;
+  background: #0b0f19;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 35px;
+}
+
+/* LOGO + GEAR GENIE TEXT */
+.logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;          /* more spacing between logo + text */
+  margin-top: -10px;  /* move slightly down */
+}
+
+.gg-logo {
+  height: 85px;        /* bigger logo */
+  width: auto;
+  object-fit: contain;
+  border-radius: 10px; /* optional, smoother */
+}
+.gg-logo {
+  filter: brightness(1.4) contrast(1.2);
+}
+
+
+/* GearGenie Title */
+.brand-name {
+  color: #ffffff;
+  font-size: 58px;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  text-shadow: 0 0 18px rgba(255, 255, 255, 0.25);
+}
+
+/* Underline glow */
+.brand-name::after {
+  content: "";
+  display: block;
+  width: 180px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff3c3c, #ffa53c);
+  margin: 12px auto 0 auto;
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(255, 140, 60, 0.5);
+}
+
+/* PAGE BACKGROUND SAME LOOK AS LOGIN */
+.welcome-container {
+  width: 100%;
+  height: 100vh;
+  background: radial-gradient(circle at center, #0f1625, #000000);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+/* DO NOT CHANGE TOP TITLE LOOK */
+.brand-title {
+  color: #ffffff;
+  font-size: 64px;
+  font-weight: 900;
+  text-align: center;
+  letter-spacing: 1.5px;
+  margin-top: -40px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+}
+
+.brand-title::after {
+  content: "";
+  display: block;
+  width: 180px;
+  height: 4px;
+  background: linear-gradient(90deg, #ff3c3c, #ffa53c);
+  margin: 10px auto 0;
+  border-radius: 8px;
+  box-shadow: 0 0 18px rgba(255, 140, 60, 0.5);
+}
+
+/* ONLY CARD LOOK SAME AS LOGIN/SIGNUP */
+.welcome-card {
+  width: 480px;
+  padding: 45px 60px;
+  border-radius: 18px;
+  background: rgba(12, 18, 30, 0.9);  /* glass */
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 40px rgba(0, 195, 255, 0.35);  /* blue glow */
+  text-align: center;
+  animation: fadeIn 1s ease;
+}
+
+/* CARD TITLE */
+.title {
+  font-size: 32px;
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* SUBTITLE */
+.subtitle {
+  color: #cbd3df;
+  font-size: 16px;
+  margin-bottom: 30px;
+}
+
+/* BUTTONS */
+.button-group {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.btn {
+  padding: 12px 26px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.25s ease;
+  background: linear-gradient(90deg, #29b7ff, #007bff);
+  color: white;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(41, 183, 255, 0.5);
+}
+
+.btn.secondary {
+  background: #1e2333;
+}
+
+.btn.secondary:hover {
+  background: #2d344a;
+  transform: translateY(-2px);
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}

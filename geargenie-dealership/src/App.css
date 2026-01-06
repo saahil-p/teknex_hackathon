@@ -1,0 +1,290 @@
+/* FULL PAGE BACKGROUND FIX */
+body {
+  background: #0B0C10 !important;
+  color: #ffffff !important;
+}
+
+/* SERVICE PAGE WRAPPER */
+.container, .content-wrapper, .main-wrapper {
+  background: transparent !important;
+  color: #fff !important;
+}
+
+/* TITLES */
+h1, h2, h3, p {
+  color: #ffffff !important;
+}
+
+/* FILTER BUTTONS */
+button, .btn {
+  background: #16181F !important;
+  border: 1px solid #23252E !important;
+  color: #ffffff !important;
+}
+
+button:hover, .btn:hover {
+  background: #E63946 !important;
+  color: #fff !important;
+  border-color: #E63946 !important;
+}
+
+/* TABLE */
+table {
+  background: #16181F !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+thead {
+  background: #101218 !important;
+}
+
+thead th {
+  color: #E63946 !important;
+  border-bottom: 1px solid #23252E !important;
+}
+
+tbody tr {
+  background: #16181F !important;
+  color: #ffffff !important;
+}
+
+tbody tr:hover {
+  background: rgba(230, 57, 70, 0.12) !important;
+}
+
+td {
+  border-bottom: 1px solid #23252E !important;
+}
+
+/* STATUS BADGES */
+.status {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status.accepted {
+  background: rgba(0, 200, 83, 0.15) !important;
+  color: #00C853 !important;
+}
+
+.status.pending {
+  background: rgba(255, 193, 7, 0.12) !important;
+  color: #FFC107 !important;
+}
+
+.status.rejected {
+  background: rgba(230, 57, 70, 0.2) !important;
+  color: #E63946 !important;
+}
+
+/* ACTION BUTTONS */
+.view-btn {
+  background: #2A9DF4 !important;
+  color: white !important;
+}
+
+.accept-btn {
+  background: #00C853 !important;
+}
+
+.reject-btn {
+  background: #E63946 !important;
+}
+.card, 
+.overview-card, 
+.widget-card, 
+.dashboard-card {
+  background: #16181F !important;
+  border: 1px solid #23252E !important;
+  border-radius: 12px !important;
+  color: #fff !important;
+  box-shadow: 0px 0px 10px rgba(230, 57, 70, 0.08) !important;
+}
+h1, h2, h3, h4, h5, h6, p, span, label {
+  color: #ffffff !important;
+}
+.sidebar {
+  background: #101218 !important;
+  color: #fff !important;
+  border-right: 1px solid #23252E !important;
+}
+
+.sidebar a {
+  color: #A9ABB3 !important;
+}
+
+.sidebar a:hover, 
+.sidebar a.active {
+  color: #fff !important;
+  background: #E63946 !important;
+  border-radius: 8px !important;
+}
+.main-content, 
+.content-wrapper, 
+.dashboard-content {
+  background: transparent !important;
+  color: #fff !important;
+}
+.dashboard-header {
+  text-align: center !important;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.dashboard-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 8px;
+}
+
+.dashboard-header p {
+  font-size: 18px;
+  color: #A9ABB3;
+}
+/* CENTER THE CARDS BEAUTIFULLY */
+.overview-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+  padding: 10px;
+}
+
+/* INDIVIDUAL CARDS */
+.overview-card {
+  width: 280px;
+  min-height: 140px;
+  padding: 25px 20px;
+  background: #16181F;
+  border: 1px solid #23252E;
+  border-radius: 16px;
+  text-align: center;
+  cursor: pointer;
+
+  /* Smooth but slower OUT effect */
+  transform: scale(1);
+  transition: 
+    transform 0.45s cubic-bezier(0.19, 1, 0.22, 1), /* slow OUT */
+    box-shadow 0.45s ease,
+    border-color 0.45s ease;
+}
+
+/* FAST ZOOM-IN POP EFFECT */
+.overview-card:hover {
+  transform: scale(1.10);
+  transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1); /* fast IN */
+  border-color: #E63946;
+  box-shadow: 0px 12px 35px rgba(230, 57, 70, 0.45);
+}
+
+/* TEXT ANIMATION */
+.overview-card h3,
+.overview-card p {
+  transition: 0.3s ease;
+}
+
+.overview-card:hover h3 {
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.overview-card:hover p {
+  color: #E63946;
+}
+
+/* FULL CARD ZOOM EFFECT */
+.overview-card {
+  transform: scale(1);
+  transition: transform 0.35s ease-in-out, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.overview-card:hover {
+  transform: scale(1.08);              /* ⭐CARD ZOOM IN⭐ */
+  border-color: #E63946;
+  box-shadow: 0px 8px 25px rgba(230, 57, 70, 0.35);
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+
+.overview-card {
+  animation: fadeIn 0.6s ease forwards;
+}
+.overview-card:nth-child(1) { animation-delay: 0.1s; }
+.overview-card:nth-child(2) { animation-delay: 0.2s; }
+.overview-card:nth-child(3) { animation-delay: 0.3s; }
+.overview-card:nth-child(4) { animation-delay: 0.4s; }
+
+.service-header {
+  text-align: center !important;
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 25px;
+}
+
+.service-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+}
+
+.service-header p {
+  font-size: 18px;
+  color: #A9ABB3 !important;
+  margin-top: 8px;
+}
+.nav-links-column {
+  display: flex;
+  flex-direction: column;   /* row → COLUMN */
+  gap: 10px;                /* space between links */
+  margin-top: 10px;
+  padding-left: 25px;       /* little indent */
+}
+
+.nav-links-column a {
+  color: #A9ABB3 !important;
+  font-size: 16px;
+  text-decoration: none;
+  transition: 0.3s ease;
+}
+
+.nav-links-column a:hover {
+  color: #fff !important;
+  transform: translateX(5px);  /* small slide animation 😍 */
+}
+.booking-details-card {
+  background: #16181F !important;
+  color: #ffffff !important;
+  border: 1px solid #23252E !important;
+  border-radius: 14px;
+  padding: 25px;
+}
+.booking-details-card label,
+.booking-details-card h3,
+.booking-details-card p {
+  color: #ffffff !important;
+}
+.booking-details-card {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+.booking-details-card label,
+.booking-details-card p,
+.booking-details-card span {
+  color: #000000 !important;
+}
