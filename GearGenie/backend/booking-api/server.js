@@ -29,7 +29,21 @@ app.use("/api/service-estimates", serviceEstimateRoutes);
 // Submit booking from app
 app.post("/book", async (req, res) => {
   try {
-    await Booking.create(req.body);
+    // await Booking.create(req.body);
+    // console.log("📦 ========================================");
+    // console.log("📦 RECEIVED BOOKING DATA:");
+    // console.log(JSON.stringify(req.body, null, 2));
+    // console.log("📦 ========================================");
+    // console.log("💰 SERVICE ESTIMATE ONLY:");
+    // console.log(JSON.stringify(req.body.serviceEstimate, null, 2));
+    // console.log("📦 ========================================");
+    
+    const savedBooking = await Booking.create(req.body);
+    
+    console.log("✅ ========================================");
+    console.log("✅ SAVED TO DATABASE:");
+    console.log(JSON.stringify(savedBooking, null, 2));
+    console.log("✅ ========================================");
     return res.json({ success:true, message:"Booking stored successfully!" });
   } catch (error) {
     return res.json({ success:false, message:"Failed to save booking" });
