@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { BACKEND_URL } from "../config"; // <-- you already made this in last step
+import { BACKEND_URL } from "../config";
 
 export default function BookingPickupScreen({ route, navigation }) {
-  const { centre, type, obdData } = route?.params ?? {};
+  const { centre, type, obdData, serviceEstimate } = route?.params ?? {}; // ✅ Added serviceEstimate
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -34,6 +34,8 @@ export default function BookingPickupScreen({ route, navigation }) {
       alert("Fill all details");
       return;
     }
+      console.log("🔍 DEBUG - serviceEstimate from route.params:", serviceEstimate); // ⬅️ ADD THIS
+
 
     const payload = {
       customerName: name,
@@ -48,7 +50,10 @@ export default function BookingPickupScreen({ route, navigation }) {
       pickup: true,
       location: { lat: centre.lat, lon: centre.lon },
       obdData,
+      serviceEstimate: serviceEstimate, // ✅ Now using destructured variable
     };
+      console.log("📦 DEBUG - Full payload being sent:", JSON.stringify(payload, null, 2)); // ⬅️ ADD THIS
+
 
     try {
       const res = await fetch(`${BACKEND_URL}/book`, {
@@ -57,10 +62,15 @@ export default function BookingPickupScreen({ route, navigation }) {
         body: JSON.stringify(payload),
       });
 
-      const json = await res.json();
+      console.log("Response Status:", res.status);
+      const textResponse = await res.text();
+      console.log("Raw Response Text:", textResponse);
+
+      const json = JSON.parse(textResponse);
       alert(json.message);
     } catch (e) {
-      alert("Error booking pickup");
+      console.error("Error submitting pickup:", e);
+      alert(`Error booking pickup: ${e.message || e}`);
     }
   }
 

@@ -21,8 +21,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Animated } from "react-native";
 import ChatbotWidget from "./components/ChatbotWidget";
 
-
-
 // FIREBASE
 import {
   collection,
@@ -53,77 +51,6 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 // ===================================================================
 // 🔥 FINAL UNIVERSAL BLACK DROPDOWN (Android + Web + Scrollable)
 // ===================================================================
-// function DarkDropdown({ items, value, onChange }) {
-//   const [open, setOpen] = useState(false);
-
-//   return (
-//     <View style={{ width:160, marginTop:6 }}>
-      
-//       <TouchableOpacity
-//         onPress={()=>setOpen(true)}
-//         style={{
-//           backgroundColor:"#03131b",
-//           borderColor:"#00e5ff80",
-//           borderWidth:1,
-//           borderRadius:8,
-//           paddingVertical:8,
-//           paddingHorizontal:10,
-//         }}
-//       >
-//         <Text style={{color:"#00e5ff"}}>
-//           {items.length ? `Sample ${value+1}` : "Sample"}
-//         </Text>
-//       </TouchableOpacity>
-
-//       <Modal visible={open} transparent animationType="fade">
-//         <TouchableOpacity
-//           activeOpacity={1}
-//           onPress={()=>setOpen(false)}
-//           style={{
-//             flex:1,
-//             backgroundColor:"rgba(0,0,0,0.5)",
-//             justifyContent:"center",
-//             alignItems:"center"
-//           }}
-//         >
-//           <View style={{
-//             width:160,
-//             backgroundColor:"#03131b",
-//             borderRadius:8,
-//             borderColor:"#00e5ff80",
-//             borderWidth:1,
-//             maxHeight:200,
-//             overflow:"hidden"
-//           }}>
-//             <ScrollView
-//               showsVerticalScrollIndicator={true}
-//               persistentScrollbar={true}
-//               nestedScrollEnabled
-//             >
-//               {items.map((label,i)=>(
-//                 <TouchableOpacity
-//                   key={i}
-//                   onPress={()=>{
-//                     onChange(i);
-//                     setOpen(false);
-//                   }}
-//                   style={{
-//                     padding:10,
-//                     backgroundColor:i===value?"#004450":"transparent"
-//                   }}
-//                 >
-//                   <Text style={{color:"#00e5ff"}}>{label}</Text>
-//                 </TouchableOpacity>
-//               ))}
-//             </ScrollView>
-//           </View>
-
-//         </TouchableOpacity>
-//       </Modal>
-
-//     </View>
-//   );
-// }
 function DarkDropdown({ items, value, onChange }) {
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({x:0,y:0});
@@ -205,12 +132,11 @@ function DarkDropdown({ items, value, onChange }) {
 }
 
 
-
-
 // ================= HOME SCREEN =================
 function HomeScreen({ navigation }) {
   const [loading, setLoading] = useState(false);
   const [results, setResults] = useState(null);
+  const [serviceEstimate, setServiceEstimate] = useState(null); // ⬅️ NEW: Store estimate separately
   const [samples, setSamples] = useState([]);
   const [selectedSampleIndex, setSelectedSampleIndex] = useState(0);
   const [mlLoading, setMlLoading] = useState(false);
@@ -274,7 +200,14 @@ function HomeScreen({ navigation }) {
 
       if (!r.ok) throw new Error("Network Error");
       const j = await r.json();
-      setResults(j);
+      
+      console.log("🔍 FULL API RESPONSE:", JSON.stringify(j, null, 2)); // ⬅️ ADD THIS
+    console.log("💰 SERVICE ESTIMATE:", j.serviceEstimate); // ⬅️ ADD THIS
+
+      // ⬅️ NEW: Store both predictions and serviceEstimate
+      setResults(j.predictions || j); // Handle both response formats
+      setServiceEstimate(j.serviceEstimate); // Store estimate for booking
+      
     } catch (e) {
       alert(e.message);
     } finally {
@@ -286,7 +219,7 @@ function HomeScreen({ navigation }) {
   }
 
 
-  // ========== DOWNLOAD ESTIMATE ==========
+  // ========== DOWNLOAD ESTIMATE PDF ==========
   async function downloadEstimate() {
     if (!samples.length) return alert("No samples found");
     if (!results) return alert("Please sync data first to get a prediction.");
@@ -294,7 +227,7 @@ function HomeScreen({ navigation }) {
     setDownloading(true);
 
     const selected = samples[selectedSampleIndex];
-    const { label, ...dataWithoutId } = selected;
+    const { id, label, ...dataWithoutId } = selected;
 
     try {
       const r = await fetch(ESTIMATE_URL, {
@@ -439,18 +372,44 @@ function HomeScreen({ navigation }) {
           <>
             <HealthCard title="Engine" iconName="engine"
               health={results.engine.health_percent}
-              recommendation={results.engine.status} rul={results.engine.rul_km}
-              onHelpPress={()=>navigation.navigate("OEMGarages",{type:"engine",obdData:currentSample})}/>
+              recommendation={results.engine.status} 
+              rul={results.engine.rul_km}
+              onHelpPress={() => {
+  console.log("=================================");
+  console.log("🚀 Navigating to OEMGarages from Engine");
+  console.log("serviceEstimate:", serviceEstimate);
+  console.log("=================================");
+  
+  navigation.navigate("OEMGarages", {
+    type: "engine",
+    obdData: currentSample,
+    serviceEstimate: serviceEstimate
+  });
+}}
+            />
 
             <HealthCard title="Battery" iconName="battery"
               health={results.battery.health_percent}
-              recommendation={results.battery.status} rul={results.battery.rul_km}
-              onHelpPress={()=>navigation.navigate("OEMGarages",{type:"battery",obdData:currentSample})}/>
+              recommendation={results.battery.status} 
+              rul={results.battery.rul_km}
+              onHelpPress={() => navigation.navigate("OEMGarages", {
+                type: "battery",
+                obdData: currentSample,
+                serviceEstimate: serviceEstimate  // ⬅️ NEW: Pass estimate
+                
+              })}
+            />
 
-            <HealthCard title="Brakes" iconName="car-brake-abs"s
+            <HealthCard title="Brakes" iconName="car-brake-abs"
               health={results.brake.health_percent}
-              recommendation={results.brake.status} rul={results.brake.rul_km}
-              onHelpPress={()=>navigation.navigate("OEMGarages",{type:"brakes",obdData:currentSample})}/>
+              recommendation={results.brake.status} 
+              rul={results.brake.rul_km}
+              onHelpPress={() => navigation.navigate("OEMGarages", {
+                type: "brakes",
+                obdData: currentSample,
+                serviceEstimate: serviceEstimate  // ⬅️ NEW: Pass estimate
+              })}
+            />
           </>
           :
           <Text style={{color:"#87a4b6",textAlign:"center"}}>Press Sync to load data</Text>}
@@ -461,11 +420,14 @@ function HomeScreen({ navigation }) {
       <View style={styles.bottomServiceWrapper}>
         <TouchableOpacity
           style={styles.bottomServiceButton}
-          onPress={()=>navigation.navigate("OEMGarages",{type:"general",obdData:currentSample})}
+          onPress={() => navigation.navigate("OEMGarages", {
+            type: "general",
+            obdData: currentSample,
+            serviceEstimate: serviceEstimate  // ⬅️ NEW: Pass estimate
+          })}
         >
           <Text style={styles.bottomServiceText}>⚙ Contact Service</Text>
         </TouchableOpacity>
-
       </View>
       
       <ChatbotWidget />

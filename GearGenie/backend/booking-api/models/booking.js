@@ -8,9 +8,9 @@ const BookingSchema = new mongoose.Schema({
   centreName: String,
   issueType: String,
 
-  serviceType: { type: String, enum: ["pickup", "visit"], required: true }, // <— NEW
+  serviceType: { type: String, enum: ["pickup", "visit"], required: true },
 
-  address: { type: String }, // <— stores pickup address if provided
+  address: { type: String },
 
   location: {
     lat: Number,
@@ -18,6 +18,22 @@ const BookingSchema = new mongoose.Schema({
   },
 
   obdData: Object,
+  
+  // Embedded service estimate instead of reference
+ serviceEstimate: {
+    estimates: [
+      {
+        component: String,
+        status: String,
+        recommendedService: String,
+        estimatedHours: Number,
+        estimatedCostUSD: Number
+      }
+    ],
+    totalEstimatedHours: Number,
+    totalEstimatedCostUSD: Number
+  },
+
   createdAt: { type: Date, default: Date.now }
 });
 

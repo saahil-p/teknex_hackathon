@@ -4,7 +4,7 @@ import { BACKEND_URL } from "../config";
 
 
 export default function BookingVisitScreen({ route, navigation }) {
-  const { centre, type, obdData } = route?.params ?? {};
+  const { centre, type, obdData,serviceEstimate } = route?.params ?? {};
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -39,10 +39,11 @@ export default function BookingVisitScreen({ route, navigation }) {
       location: { lat: centre.lat, lon: centre.lon },
       issueType: type,
       obdData, // FULL SAMPLE / REAL OBD LATER
+      serviceEstimate: serviceEstimate,
     };
 
     try {
-      const res = await fetch("http://192.168.1.6:5000/book", {
+      const res = await fetch(`${BACKEND_URL}/book`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(bookingPayload),
