@@ -335,21 +335,35 @@ function HomeScreen({ navigation }) {
             />
 
 
-            <View style={{flexDirection: 'row', alignItems: 'center', marginTop: 14}}>
-              <TouchableOpacity onPress={syncSelectedSample} activeOpacity={0.85}>
-                <LinearGradient colors={["#00e5ff","#007aff"]} style={styles.syncButton}>
-                  {loading ? <ActivityIndicator color="#001a22"/> : <Text style={styles.syncText}>Sync OBD Data</Text>}
-                </LinearGradient>
-              </TouchableOpacity>
+            <View style={{marginTop: 20}}>
+  <TouchableOpacity onPress={syncSelectedSample} activeOpacity={0.85}>
+    <LinearGradient colors={["#00e5ff","#007aff"]} style={styles.syncButton}>
+      {loading ? (
+        <ActivityIndicator color="#001a22"/>
+      ) : (
+        <>
+          <MaterialCommunityIcons name="sync" size={18} color="#001a22" style={{marginRight: 8}} />
+          <Text style={styles.syncText}>Sync OBD Data</Text>
+        </>
+      )}
+    </LinearGradient>
+  </TouchableOpacity>
 
-              {results && (
-                <TouchableOpacity onPress={downloadEstimate} activeOpacity={0.85} style={{marginLeft: 10}}>
-                  <LinearGradient colors={["#7a7a7a", "#4a4a4a"]} style={styles.syncButton}>
-                    {downloading ? <ActivityIndicator color="#ffffff"/> : <MaterialCommunityIcons name="download" size={20} color="white" />}
-                  </LinearGradient>
-                </TouchableOpacity>
-              )}
-            </View>
+  {results && (
+    <TouchableOpacity onPress={downloadEstimate} activeOpacity={0.85} style={{marginTop: 12}}>
+      <LinearGradient colors={["#00e5ff","#007aff"]} style={styles.syncButton}>
+        {downloading ? (
+          <ActivityIndicator color="#001a22"/>
+        ) : (
+          <>
+            <MaterialCommunityIcons name="download" size={18} color="#001a22" style={{marginRight: 8}} />
+            <Text style={styles.syncText}>Download Estimate</Text>
+          </>
+        )}
+      </LinearGradient>
+    </TouchableOpacity>
+  )}
+</View>
           </View>
 
 
