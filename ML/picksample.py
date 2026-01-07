@@ -4,15 +4,17 @@ import joblib
 import numpy as np
 
 # --- 1. Setup and Configuration ---
-print("--- Script Start: Finding and Verifying Correctly Predicted Samples ---")
+print("--- Script Start: Finding a multi-state sample ---")
 
 try:
-    df = pd.read_csv('/Users/saahilp/Hackathon/GearGenie/backend/baseline/synthetic_hierarchical_data.csv')
+    # Load the entire dataset
+    df = pd.read_csv('/Users/saahilp/Desktop/Hackathon/obd-samples-new.csv')
+    print(f"✅ Loaded {len(df)} rows from synthetic_hierarchical_data.csv")
 except FileNotFoundError:
-    print("Error: synthetic_hierarchical_data.csv not found. Please ensure the file exists.")
+    print("❌ Error: synthetic_hierarchical_data.csv not found. Please ensure the file exists.")
     exit()
 
-output_path = 'obd-samples.csv'
+output_path = 'obd-samples_new.csv'
 
 # --- 2. Load Models ---
 print("\n--- Loading trained models ---")
@@ -34,90 +36,96 @@ battery_features = base_features + [
 ]
 
 components = {
-    'Engine': {'features': engine_features, 'rul_col': 'RUL_Engine'},
-    'Brake': {'features': brake_features, 'rul_col': 'RUL_Brake'},
-    'Battery': {'features': battery_features, 'rul_col': 'RUL_Battery'}
+    'Engine': {'features': engine_features},
+    'Brake': {'features': brake_features},
+    'Battery': {'features': battery_features}
 }
 
-RUL_THRESHOLD = 30
+RUL_THRESHOLD = 30  # Attention below this value
+CRITICAL_THRESHOLD = 20 # Critical below this value
+
 models = {}
+all_models_loaded = True
 for comp_name in components.keys():
     try:
+        # Only RUL models are needed for status classification based on RUL
         models[f'rul_{comp_name.lower()}'] = joblib.load(f'saved_models/rul_{comp_name.lower()}_regressor.pkl')
-        models[f'clf_{comp_name.lower()}'] = joblib.load(f'saved_models/classifier_{comp_name.lower()}_model.pkl')
-        models[f'le_{comp_name.lower()}'] = joblib.load(f'saved_models/classifier_{comp_name.lower()}_le.pkl')
     except FileNotFoundError as e:
-        print(f"Warning: Could not load model for {comp_name}. {e}")
-        continue
+        print(f"❌ Error: Could not load RUL model for {comp_name}. {e}")
+        all_models_loaded = False
 
-def predict_hierarchical_failure(data_row):
-    predicted_ruls = {}
-    for comp_name, details in components.items():
-        model = models.get(f'rul_{comp_name.lower()}')
-        if model:
-            features = pd.DataFrame([data_row[details['features']]])
-            rul = model.predict(features)[0]
-            predicted_ruls[comp_name] = rul
+if not all_models_loaded:
+    print("\n--- Cannot proceed without all RUL models. Exiting. ---")
+    exit()
+print("✅ All RUL models loaded successfully.")
 
-    for comp_name, rul in predicted_ruls.items():
-        if rul < RUL_THRESHOLD:
-            clf_model = models.get(f'clf_{comp_name.lower()}')
-            le = models.get(f'le_{comp_name.lower()}')
-            
-            if clf_model and le:
-                features = pd.DataFrame([data_row[components[comp_name]['features']]])
-                prediction_encoded = clf_model.predict(features)[0]
-                failure_class = le.inverse_transform([prediction_encoded])[0]
-                return comp_name, failure_class
+
+# --- 3. Define Prediction and Status Function ---
+def get_component_status(data_row, comp_name):
+    """Predicts RUL and determines the health status for a single component."""
+    model = models.get(f'rul_{comp_name.lower()}')
+    if not model:
+        return None, "Unknown"
+
+    # Prepare features for prediction
+    features = pd.DataFrame([data_row[components[comp_name]['features']]])
     
-    return "None", "No Failure"
+    # Predict RUL
+    try:
+        rul = model.predict(features)[0]
+    except Exception as e:
+        print(f"Warning: RUL prediction failed for {comp_name} on a row. Error: {e}")
+        return None, "Unknown"
 
-# --- 3. Find and collect samples that are predicted correctly ---
-print("\n--- Searching for correctly predicted samples for each failure class ---")
-correct_samples = []
-failure_groups = df.groupby(['component', 'failure_category'])
-
-for (component, failure_category), group in failure_groups:
-    print(f"Searching for: Component='{component}', Failure='{failure_category}'")
-    found = False
-    for index, row in group.iterrows():
-        predicted_component, predicted_failure = predict_hierarchical_failure(row)
+    # Determine status based on RUL thresholds
+    if rul <= CRITICAL_THRESHOLD:
+        status = "Critical"
+    elif rul < RUL_THRESHOLD:
+        status = "Attention"
+    else:
+        status = "Healthy"
         
-        if predicted_component == component and predicted_failure == failure_category:
-            print(f"  > Found a correct sample at index {index}.")
-            correct_samples.append(row)
-            found = True
-            break 
-    if not found:
-        print(f"  > Could not find a correctly predicted sample for this class.")
+    return rul, status
 
-# --- 4. Save the new samples to a CSV file ---
-if correct_samples:
-    samples_df = pd.DataFrame(correct_samples)
-    samples_df.to_csv(output_path, index=False)
-    print(f"\nSuccessfully created '{output_path}' with {len(samples_df)} correctly predicted samples.")
+# --- 4. Find a sample with one of each status ---
+print("\n--- Searching for a single sample with Critical, Attention, and Healthy components ---")
+found_sample = None
+for index, row in df.iterrows():
+    statuses = {}
+    for comp_name in components.keys():
+        rul, status = get_component_status(row, comp_name)
+        if status != "Unknown":
+            statuses[comp_name] = status
+
+    # Check if this row has one of each status
+    if len(statuses) == 3 and set(statuses.values()) == {"Critical", "Attention", "Critical"}:
+        print(f"\n✅ Found a perfect multi-state sample at index {index}!")
+        
+        # Add a 'label' for identification in the app
+        row['label'] = f"Sample {index} (Multi-State)"
+        found_sample = row
+        
+        # Print details of the found sample
+        print("  - Details:")
+        for comp, stat in statuses.items():
+            print(f"    - {comp}: {stat}")
+        break # Stop searching once we find one
+
+# --- 5. Save the new sample to a CSV file ---
+if found_sample is not None:
+    # Create a DataFrame from the single found sample
+    sample_df = pd.DataFrame([found_sample])
+    
+    # Reorder columns to have 'label' first for clarity
+    cols = ['label'] + [c for c in sample_df.columns if c != 'label']
+    sample_df = sample_df[cols]
+    
+    sample_df.to_csv(output_path, index=False)
+    print(f"\nSuccessfully created '{output_path}' with the multi-state sample.")
 else:
-    print("\nNo correctly predicted samples were found.")
-
-# --- 5. Final Verification (Optional) ---
-print("\n--- Verifying the new samples from the created file ---")
-try:
-    verification_samples = pd.read_csv(output_path)
-    for index, row in verification_samples.iterrows():
-        actual_component = row['component']
-        actual_failure = row['failure_category']
-        predicted_component, predicted_failure = predict_hierarchical_failure(row)
-        
-        print(f"\nSample {index+1}:")
-        print(f"  Actual:    Component='{actual_component}', Failure='{actual_failure}'")
-        print(f"  Predicted: Component='{predicted_component}', Failure='{predicted_failure}'")
-        
-        if actual_component == predicted_component and actual_failure == predicted_failure:
-            print("  Result: CORRECT")
-        else:
-            print("  Result: INCORRECT")
-except FileNotFoundError:
-    print(f"'{output_path}' was not created because no correct samples were found.")
+    print("\n❌ Could not find a single sample matching the criteria.")
+    print("Consider adjusting thresholds or using a more diverse dataset.")
 
 print("\n--- Script End ---")
+
 
