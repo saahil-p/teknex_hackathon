@@ -223,16 +223,35 @@ def predict(payload: Payload):
 # -------------------------------------------------------
 def generate_service_pdf(predictions: dict):
     buffer = io.BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=letter)
+    doc = SimpleDocTemplate(buffer, pagesize=letter, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=40)
     styles = getSampleStyleSheet()
     elements = []
 
+    # Title
     elements.append(Paragraph("Service Estimate", styles['h1']))
     elements.append(Spacer(1, 12))
+
+    # Summary
     elements.append(Paragraph("Here is a summary of the recommended services for your vehicle based on the latest sensor data.", styles['Normal']))
     elements.append(Spacer(1, 24))
 
-    data = [["Component", "Status", "Recommended Service", "Est. Hours", "Est. Cost (USD)"]]
+    # Table Data - using Paragraph objects for text wrapping
+    header_style = getSampleStyleSheet()['Normal']
+    header_style.textColor = colors.whitesmoke
+    header_style.fontName = 'Helvetica-Bold'
+    header_style.fontSize = 10
+    
+    body_style = getSampleStyleSheet()['Normal']
+    body_style.fontSize = 9
+    
+    data = [[
+        Paragraph("Component", header_style),
+        Paragraph("Status", header_style),
+        Paragraph("Recommended Service", header_style),
+        Paragraph("Est. Hours", header_style),
+        Paragraph("Est. Cost (USD)", header_style)
+    ]]
+    
     total_cost = 0
     total_hours = 0
 
@@ -246,37 +265,58 @@ def generate_service_pdf(predictions: dict):
                 cost = cost_row['repair_cost_usd'].iloc[0]
                 total_hours += hours
                 total_cost += cost
+                
                 data.append([
-                    component.capitalize(), 
-                    result['status'], 
-                    failure, 
-                    f"{hours:.1f}", 
-                    f"${cost:,.2f}"
+                    Paragraph(component.capitalize(), body_style),
+                    Paragraph(result['status'], body_style),
+                    Paragraph(failure, body_style),
+                    Paragraph(f"{hours:.1f}", body_style),
+                    Paragraph(f"${cost:,.2f}", body_style)
                 ])
 
+    # Create Table with auto-adjusting row heights
     if len(data) > 1:
-        table = Table(data, colWidths=[100, 150, 150, 70, 100])
+        table = Table(data, colWidths=[80, 140, 160, 70, 90], repeatRows=1)
         style = TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+            # Header styling
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2c3e50')),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-            ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+            
+            # Body styling
+            ('BACKGROUND', (0, 1), (-1, -1), colors.HexColor('#ecf0f1')),
+            ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+            
+            # Alignment
+            ('ALIGN', (0, 0), (2, -1), 'LEFT'),
+            ('ALIGN', (3, 0), (4, -1), 'RIGHT'),
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            
+            # Padding
+            ('TOPPADDING', (0, 0), (-1, -1), 10),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+            ('LEFTPADDING', (0, 0), (-1, -1), 8),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+            
+            # Grid
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+            
+            # Font
             ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('FONTSIZE', (0, 1), (-1, -1), 9),
         ])
         table.setStyle(style)
         elements.append(table)
-        elements.append(Spacer(1, 24))
+        elements.append(Spacer(1, 30))
 
-        total_data = [["", "", "Total Estimated:", f"{total_hours:.1f} hours", f"${total_cost:,.2f}"]]
-        total_table = Table(total_data, colWidths=[100, 150, 150, 70, 100])
-        total_style = TableStyle([
-            ('ALIGN', (0, 0), (-1, -1), 'RIGHT'),
-            ('FONTNAME', (2, 0), (-1, 0), 'Helvetica-Bold'),
-        ])
-        total_table.setStyle(total_style)
-        elements.append(total_table)
+        # Totals section with better formatting
+        total_style = getSampleStyleSheet()['Normal']
+        total_style.fontSize = 11
+        total_style.fontName = 'Helvetica-Bold'
+        total_style.alignment = 2  # Right align
+        
+        elements.append(Paragraph(f"<b>Total Estimated:</b> {total_hours:.1f} hours | <b>${total_cost:,.2f}</b>", total_style))
+
     else:
         elements.append(Paragraph("No immediate service recommendations.", styles['h3']))
 
