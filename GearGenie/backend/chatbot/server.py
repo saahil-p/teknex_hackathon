@@ -287,8 +287,8 @@ if __name__ == '__main__':
     
     if initialize_connections():
         print("\n" + "="*60)
-        print("Server starting on http://0.0.0.0:5000")
+        print("Server starting on http://0.0.0.0:5001")
         print("="*60 + "\n")
-        app.run(host='0.0.0.0', port=5000, debug=True)
+        app.run(host='0.0.0.0', port=5001, debug=True)
     else:
         print("\n❌ Failed to initialize. Please check your configuration.\n")

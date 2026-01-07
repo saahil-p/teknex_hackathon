@@ -15,7 +15,7 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const CHATBOT_API_URL = 'http://192.168.0.108:5000/chat';
+const CHATBOT_API_URL = 'http://127.0.0.1:5001/chat';
 
 const ChatbotWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -255,6 +255,8 @@ const ChatbotWidget = () => {
                   onChangeText={setInputText}
                   onSubmitEditing={sendMessage}
                   multiline
+                  returnKeyType="send"            
+                  blurOnSubmit={true}
                   maxLength={500}
                 />
                 <TouchableOpacity
