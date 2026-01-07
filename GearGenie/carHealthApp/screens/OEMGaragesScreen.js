@@ -27,7 +27,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 }
 
 export default function OEMGaragesScreen({ route, navigation }) {
-  const { type, obdData } = route.params; // <-- Now receiving the actual sample
+  const { type, obdData,serviceEstimate } = route.params; // <-- Now receiving the actual sample
 
   const [loading, setLoading] = useState(true);
   const [garages, setGarages] = useState([]);
@@ -126,7 +126,8 @@ out body;
               navigation.navigate("BookingChoice", {
                 centre: item,
                 type,
-                obdData, // <-- passing OBD data forward
+                obdData,
+                serviceEstimate, // <-- passing OBD data forward
               })
             }
             style={{

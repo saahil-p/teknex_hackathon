@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 
 export default function BookingChoiceScreen({ route, navigation }) {
-  const { centre, type, obdData } = route?.params ?? {};
+  const { centre, type, obdData, serviceEstimate } = route?.params ?? {};
 
   if (!centre || !type) {
     return (
@@ -23,7 +23,7 @@ export default function BookingChoiceScreen({ route, navigation }) {
       </Text>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("BookingVisit", { centre, type, obdData })}
+        onPress={() => navigation.navigate("BookingVisit", { centre, type, obdData,serviceEstimate })}
         style={{ backgroundColor:"#2ecc71", padding:18, borderRadius:10, marginBottom:20 }}
       >
         <Text style={{ color:"#06212c", textAlign:"center", fontSize:18, fontWeight:"bold" }}>
@@ -32,7 +32,7 @@ export default function BookingChoiceScreen({ route, navigation }) {
       </TouchableOpacity>
 
       <TouchableOpacity
-        onPress={() => navigation.navigate("BookingPickup", { centre, type, obdData })}
+        onPress={() => navigation.navigate("BookingPickup", { centre, type, obdData,serviceEstimate  })}
         style={{ backgroundColor:"#3498db", padding:18, borderRadius:10 }}
       >
         <Text style={{ color:"white", textAlign:"center", fontSize:18, fontWeight:"bold" }}>

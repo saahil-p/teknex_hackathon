@@ -1,1 +1,1 @@
-export const BACKEND_URL = "http://192.168.0.102:5000";   // Booking API server
+export const BACKEND_URL = "http://127.0.0.1.:5000";   // Booking API server
